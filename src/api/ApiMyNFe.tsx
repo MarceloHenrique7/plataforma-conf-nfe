@@ -107,3 +107,39 @@ export const useGetmyNFe = (id: string) => {
 
   return { nfe, isLoading };
 };
+
+export const useGetAllNFe = () => {
+  const getAllNFe = async (): Promise<INFe[]> => {
+    const response = await fetch(`${API_BASE_URL}/nfe/get/all`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch NFe");
+    }
+
+    return response.json();
+  };
+
+  const { data: nfes, isLoading, isError, isSuccess } = useQuery(
+    "fetchAllNFe",
+    getAllNFe,
+  );
+
+
+  useEffect(() => {
+    if (isSuccess) {
+      toast.success("Notas Fiscais Encontradas");
+    }
+
+    if (isError) {
+      toast.error("Nenhuma Nota fiscal verificada");
+    }
+  }, [isSuccess, isError]);
+
+
+  return { nfes, isLoading };
+};

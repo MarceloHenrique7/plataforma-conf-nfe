@@ -6,6 +6,7 @@ import HomePage from './pages/HomePage'
 import Layout from './layout/layout'
 import RegisterXML from './pages/RegisterXML'
 import ProductPage from './pages/ProductPage'
+import NFesVerifiedPage from './pages/NFesVerifiedPage'
 
 
 
@@ -46,6 +47,14 @@ const AppRoutes = () => {
                 element={
                     <Layout>
                         <RegisterXML />
+                    </Layout>
+                }
+            />
+            <Route
+                path='/notas-fiscais-status'
+                element={
+                    <Layout>
+                        <NFesVerifiedPage />
                     </Layout>
                 }
             />

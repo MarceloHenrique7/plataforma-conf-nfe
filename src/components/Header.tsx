@@ -21,6 +21,9 @@ const Header = () => {
                 <Link to={"/registrar-xml"} >
                     Cadastrar NFe
                 </Link>
+                <Link to={"/notas-fiscais-status"} >
+                    NFe Status
+                </Link>
             </div>
 
         </div>
