@@ -45,10 +45,11 @@ const ProductPage = () => {
   const [products, setProducts] = useState<Product[]>([]); // Estado para armazenar os produtos
   const [productCode, setProductCode] = useState(""); // Estado para o valor do código do produto
   const [productFound, setProductFound] = useState<Product | null>(null); // Estado para o produto encontrado
-  const [showPopoverEndOp, setShowPopoverEndOp] = useState(false); // Estado para controlar a visibilidade do popover
   const [showPopoverNotF, setShowPopoverNotF] = useState(false); // Estado para controlar a visibilidade do popover
   const [showPopoverNFeVerified, setShowPopoverNFeVerified] = useState(true); // Estado para controlar a visibilidade do popover
   const navigate = useNavigate()
+
+
   useEffect(() => {
     if (nfe && nfe.products) {
       // Adiciona a propriedade verified a cada produto, assumindo que seja false por padrão
@@ -76,7 +77,7 @@ const ProductPage = () => {
       // Verifica se todos os produtos foram verificados
       if (products.length === 1) { // Se o produto encontrado era o último
         // Passando a estrutura correta para updateNFe
-        updateNFe({ data: { codNFe: nfe?.codNFe as string, verified: true } }); // Atualiza a NFe
+        updateNFe({ codNFe: nfe?.codNFe as string, verified: true }); // Atualiza a NFe
       }
     } else {
       setShowPopoverNotF(true)
@@ -94,7 +95,6 @@ const ProductPage = () => {
 
   // Função para fechar o popover
   const handleClosePopover = () => {
-    setShowPopoverEndOp(false); // Fecha o popover
     setShowPopoverNotF(false); // Fecha o popover
     setShowPopoverNFeVerified(false)
     setProductCode("")

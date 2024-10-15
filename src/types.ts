@@ -8,6 +8,7 @@ export interface INFe {
     autXML: {
       cpf: string,
     },
+    verified: boolean,
     products: Array<{
       
         cEAN: string,
@@ -20,6 +21,6 @@ export interface INFe {
         vUnTrib: string,
         xPed: string,
         xProd: string,
+        verified: boolean;
       }>;
-      verified: boolean,
   }
