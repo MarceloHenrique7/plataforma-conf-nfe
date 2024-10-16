@@ -12,7 +12,8 @@ import { useNavigate } from "react-router-dom"
 
 
 const formSchema = z.object({
-    searchQuery: z.string().optional()
+    searchQuery: z.string().optional(),
+    table: z.number().optional()
 })
 
 type FormDataSearch = z.infer<typeof formSchema>
@@ -30,8 +31,14 @@ const ConfPage = () => {
 
     const onSubmit = (data: FormDataSearch) => {
         console.log(data)
+
+        const queryString = new URLSearchParams({
+            table: data.table ? String(data.table) : '' 
+        }).toString();
+
         navigate({
-            pathname: `/conf/${data.searchQuery}`
+            pathname: `/conf/${data.searchQuery}`,
+            search: `?${queryString}`
         })
     }
 

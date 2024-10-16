@@ -23,4 +23,5 @@ export interface INFe {
   products: Product[]; // Use o tipo Product aqui
   createdAt: Date;
   verifiedAt: string;
+  table: number
 }

@@ -28,23 +28,26 @@ const InputSearchForm = () => {
             />
 
             <FormField 
-                name="mesa"
+                name="table"
                 control={control}
                 render={({ field }) => (
                     <FormItem className="flex flex-col">
                         <FormLabel>
-                            Numero. Mesa
+                            Número da Mesa
                         </FormLabel>
                         <FormControl>
-                            <Select onValueChange={field.onChange} value={field.value}>
-                            <SelectTrigger className="w-[180px]">
-                                <SelectValue placeholder="Mesa de conferência" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectItem value="1">Mesa 1</SelectItem>
-                                <SelectItem value="2">Mesa 2</SelectItem>
-                                <SelectItem value="3">Mesa 3</SelectItem>
-                            </SelectContent>
+                            <Select 
+                                onValueChange={(value) => field.onChange(Number(value))} // Converte para número
+                                value={field.value ? String(field.value) : ''} // Converte para string para o Select
+                            >
+                                <SelectTrigger className="w-[180px]">
+                                    <SelectValue placeholder="Mesa de conferência" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="1">Mesa 1</SelectItem>
+                                    <SelectItem value="2">Mesa 2</SelectItem>
+                                    <SelectItem value="3">Mesa 3</SelectItem>
+                                </SelectContent>
                             </Select>
                         </FormControl>
                     </FormItem>

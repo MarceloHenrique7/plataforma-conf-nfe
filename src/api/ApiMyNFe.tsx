@@ -6,7 +6,7 @@ import { useEffect } from "react";
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 export const useUpdateNFe = () => {
-  const updateXMLNFe = async (data: { codNFe: string; verified: boolean }): Promise<void> => {
+  const updateXMLNFe = async (data: { codNFe: string; verified: boolean, table: number | null }): Promise<void> => {
     const response = await fetch(`${API_BASE_URL}/nfe/put`, {
       method: "PUT",
       headers: {

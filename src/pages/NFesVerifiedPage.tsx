@@ -75,6 +75,14 @@ const NFesVerifiedPage = () => {
                             {nfe?.verifiedAt ? new Date(nfe.verifiedAt).toLocaleString() : 'N/A'}
                         </span>
                     </p>
+                    <p className="text-gray-700 flex gap-2">
+                        <span className="font-bold">
+                            Mesa:
+                        </span>
+                        <span>
+                            {nfe?.table ? nfe.table : 'S/M'}
+                        </span>
+                    </p>
                 </div>
                 <Dialog>
                     <DialogTrigger>
@@ -147,6 +155,14 @@ const NFesVerifiedPage = () => {
                         </span>
                         <span>
                             {nfe?.verifiedAt ? new Date(nfe.verifiedAt).toLocaleString() : 'N/A'}
+                        </span>
+                    </p>
+                    <p className="text-gray-700 flex gap-2">
+                        <span className="font-bold">
+                            Mesa:
+                        </span>
+                        <span>
+                            {nfe?.table ? nfe.table : 'S/M'}
                         </span>
                     </p>
                 </div>

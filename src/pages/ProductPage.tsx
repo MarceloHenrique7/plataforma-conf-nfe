@@ -1,6 +1,6 @@
 import { ScrollArea } from "../components/ui/scroll-area";
 import { useGetmyNFe, useUpdateNFe } from "../api/ApiMyNFe";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Input } from "../components/ui/input";
 import { Button } from "../components/ui/button";
@@ -50,13 +50,15 @@ const ProductPage = () => {
   const [showPopoverNFeVerified, setShowPopoverNFeVerified] = useState(true); // Estado para controlar a visibilidade do popover
   const navigate = useNavigate()
 
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const table = queryParams.get("table");
   
   useEffect(() => {
     if (nfe && nfe.products) {
       setProducts(nfe.products);
     }
   }, [nfe]);
-  console.log(products)
   
   const handleSearchProduct = (code: string) => {
     const foundProductIndex = products.findIndex((prod) => 
@@ -74,7 +76,7 @@ const ProductPage = () => {
       setProductCode(""); 
       
       if (products.length === 0) {
-        updateNFe({ codNFe: nfe?.codNFe as string, verified: true });
+        updateNFe({ codNFe: nfe?.codNFe as string, verified: true, table: Number(table as number | null) });
       }
       
     } else {
