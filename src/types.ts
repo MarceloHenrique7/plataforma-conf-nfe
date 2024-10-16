@@ -9,7 +9,8 @@ export interface Product {
   vUnTrib: string;
   xPed: string;
   xProd: string;      // Nome do produto
-  verified: boolean;  // Propriedade para indicar se o produto foi verificado
+  verified: boolean;
+  qCom: string
 }
 
 export interface INFe {

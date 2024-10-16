@@ -15,11 +15,11 @@ const Header = () => {
                 </Link>
             </div>
             <div className="space-x-5 font-bold">
-                <Link to={"/conf"} >
-                    Conferir Nota
-                </Link>
                 <Link to={"/registrar-xml"} >
                     Cadastrar NFe
+                </Link>
+                <Link to={"/conf"} >
+                    Conferir Nota
                 </Link>
                 <Link to={"/notas-fiscais-status"} >
                     NFe Status

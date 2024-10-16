@@ -61,7 +61,15 @@ const NFesVerifiedPage = () => {
                     </p>
                     <p className="text-gray-700 flex gap-2">
                         <span className="font-bold">
-                            Data/Hora:
+                            Criado as Data/Hora:
+                        </span>
+                        <span>
+                            {nfe?.createdAt ? new Date(nfe.createdAt).toLocaleString() : 'N/A'}
+                        </span>
+                    </p>
+                    <p className="text-gray-700 flex gap-2">
+                        <span className="font-bold">
+                            Verificado as Data/Hora:
                         </span>
                         <span>
                             {nfe?.verifiedAt ? new Date(nfe.verifiedAt).toLocaleString() : 'N/A'}
@@ -88,6 +96,9 @@ const NFesVerifiedPage = () => {
                                         </span>
                                         <span>
                                             Cod Prod: {product.cProd}
+                                        </span>
+                                        <span>
+                                            Qtd: {Number(product.qCom)}
                                         </span>
                                     </DialogDescription>
                                 </div>
@@ -124,7 +135,15 @@ const NFesVerifiedPage = () => {
                     </p>
                     <p className="text-gray-700 flex gap-2">
                         <span className="font-bold">
-                            Data/Hora:
+                            Criado as Data/Hora:
+                        </span>
+                        <span>
+                            {nfe?.createdAt ? new Date(nfe.createdAt).toLocaleString() : 'N/A'}
+                        </span>
+                    </p>
+                    <p className="text-gray-700 flex gap-2">
+                        <span className="font-bold">
+                            Verificado as Data/Hora:
                         </span>
                         <span>
                             {nfe?.verifiedAt ? new Date(nfe.verifiedAt).toLocaleString() : 'N/A'}
@@ -151,6 +170,9 @@ const NFesVerifiedPage = () => {
                                         </span>
                                         <span>
                                             Cod Prod: {product.cProd}
+                                        </span>
+                                        <span>
+                                            Qtd: {Number(product.qCom)}
                                         </span>
                                     </DialogDescription>
                                 </div>

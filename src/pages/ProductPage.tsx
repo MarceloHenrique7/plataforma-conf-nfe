@@ -17,7 +17,8 @@ interface Product {
   vUnTrib: string;
   xPed: string;
   xProd: string;      // Nome do produto
-  verified: boolean;  // Propriedade para indicar se o produto foi verificado
+  verified: boolean;
+  qCom: string
 }
 
 // Componente de Popover
@@ -49,41 +50,39 @@ const ProductPage = () => {
   const [showPopoverNFeVerified, setShowPopoverNFeVerified] = useState(true); // Estado para controlar a visibilidade do popover
   const navigate = useNavigate()
 
-
+  
   useEffect(() => {
     if (nfe && nfe.products) {
-      // Adiciona a propriedade verified a cada produto, assumindo que seja false por padrão
-      const productsWithVerifiedStatus = nfe.products.map(product => ({
-        ...product,
-        verified: product.verified ?? false, // Se a propriedade não existir, inicializa como false
-      }));
-      setProducts(productsWithVerifiedStatus); // Atualiza o estado com os produtos da NF-e
+      setProducts(nfe.products);
     }
   }, [nfe]);
+  console.log(products)
   
-  // Função para verificar se o produto existe, considerando cEAN e cProd
   const handleSearchProduct = (code: string) => {
-    const foundProduct = products.find((prod) => 
+    const foundProductIndex = products.findIndex((prod) => 
       prod.cEAN === code || prod.cProd === code // Verifica se o cEAN ou cProd é igual ao código inserido
     );
   
-    if (foundProduct) {
-      setProductFound(foundProduct); // Atualiza o estado com o produto encontrado
-      setProducts((prevProducts) => 
-        prevProducts.filter((prod) => prod.cEAN !== foundProduct.cEAN) // Remove o produto da lista
-      );
-      setProductCode(""); // Limpa o campo de entrada
-  
-      // Verifica se todos os produtos foram verificados
-      if (products.length === 1) { // Se o produto encontrado era o último
-        // Passando a estrutura correta para updateNFe
-        updateNFe({ codNFe: nfe?.codNFe as string, verified: true }); // Atualiza a NFe
+    if (foundProductIndex !== -1) {
+      const foundProduct = products[foundProductIndex]; 
+      setProductFound(foundProduct); 
+      
+      const arrayIndexOf = products.indexOf(foundProduct)
+
+      products.splice(arrayIndexOf, 1)
+
+      setProductCode(""); 
+      
+      if (products.length === 0) {
+        updateNFe({ codNFe: nfe?.codNFe as string, verified: true });
       }
+      
     } else {
-      setShowPopoverNotF(true)
+      setShowPopoverNotF(true);
       setProductFound(null); // Se não encontrado, limpa o estado
     }
   };
+  
   
 
   // Função chamada enquanto o usuário digita
@@ -159,8 +158,8 @@ const ProductPage = () => {
               <div className="w-full md:w-auto flex-1 p-10 rounded-md bg-gray-100 md:p-2">
                 <ScrollArea className="p-2 h-full w-full rounded-md border">
                 <div className="w-full h-full flex max-h-96 flex-col gap-3">
-                    {products.filter(prod => !prod.verified).map((prod) => (
-                      <div key={prod.cEAN} className="w-full text-gray-800 font-bold rounded-sm border-slate-700 border-2 p-2 text-sm">
+                    {products.filter(prod => !prod.verified).map((prod, index) => (
+                      <div key={index} className="w-full text-gray-800 font-bold rounded-sm border-slate-700 border-2 p-2 text-sm">
                         <h1>{prod.xProd || ""}</h1>
                         <p>cEAN: {prod.cEAN || ""}</p>
                         <p>cProd: {prod.cProd || ""}</p>
