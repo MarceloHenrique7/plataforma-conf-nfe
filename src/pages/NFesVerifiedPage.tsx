@@ -18,6 +18,8 @@ const NFesVerifiedPage = () => {
 
     const { nfes, isLoading } = useGetAllNFe()
 
+    console.log(nfes)
+
     const [products, setProducts] = useState<Product[]>([]);
 
     const nfesVerified = nfes?.filter((nfe) => nfe.verified === true)

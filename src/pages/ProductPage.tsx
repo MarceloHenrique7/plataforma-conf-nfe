@@ -50,6 +50,8 @@ const ProductPage = () => {
   const [showPopoverNFeVerified, setShowPopoverNFeVerified] = useState(true); // Estado para controlar a visibilidade do popover
   const navigate = useNavigate()
 
+  console.log(nfe)
+
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const table = queryParams.get("table");
