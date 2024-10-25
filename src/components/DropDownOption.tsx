@@ -14,16 +14,16 @@ type Props = {
 
 const SORT_OPTIONS = [
     {
-        label: "Notas Recentes",
-        value: "recentnfe"
-    },
-    {
-        label: "Data de Verficação",
-        value: "verifydate"
+        label: "Melhores Resultados",
+        value: "bestMatch"
     },
     {
         label: "Data de Registro",
-        value: "cookTime"
+        value: "createdAt"
+    },
+    {
+        label: "Data de Verificação",
+        value: "updatedAt"
     },
 
 ]

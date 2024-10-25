@@ -63,6 +63,23 @@
   font-weight: weight;
   font-style: normal;
 }
+@media print {
+  body {
+    margin: 0;
+    padding: 0;
+  }
+
+  .no-print {
+    display: none; /* Oculta elementos que não devem aparecer na impressão */
+  }
+
+  /* Estilize o cartão de etiqueta */
+  .card {
+    page-break-inside: avoid; /* Evita quebras de página dentro do cartão */
+  }
+
+  /* Outras regras de estilização para a impressão */
+}
 
 @layer base {
   * {

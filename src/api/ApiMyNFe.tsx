@@ -108,9 +108,21 @@ export const useGetmyNFe = (id: string) => {
   return { nfe, isLoading };
 };
 
-export const useGetAllNFe = () => {
-  const getAllNFe = async (): Promise<INFe[]> => {
-    const response = await fetch(`${API_BASE_URL}/nfe/get/all`, {
+export type ResultSearchNFe = {
+  totDocVerified: number,
+  totDocNotVerified: number,
+  totPagesVerified: number,
+  totPagesNotVerified: number,
+  currentPage: 1,
+  data: {
+    resVerified: Array<INFe>,
+    resNotVerified: Array<INFe>,
+  }
+}
+
+export const useGetAllNFe = (page: number = 1, limit: number = 10, searchQuery: string = "") => {
+  const getAllNFe = async (): Promise<ResultSearchNFe> => {
+    const response = await fetch(`${API_BASE_URL}/nfe/get/all?page=${page}&limit=${limit}&searchQuery=${searchQuery}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -118,17 +130,19 @@ export const useGetAllNFe = () => {
     });
 
     if (!response.ok) {
-      throw new Error("Failed to fetch NFe");
+      throw new Error("Falha ao buscar NFes");
     }
 
     return response.json();
   };
 
-  const { data: nfes, isLoading, isError, isSuccess } = useQuery(
-    "fetchAllNFe",
-    getAllNFe,
+  const { data, isLoading, isError, isSuccess } = useQuery(
+    ["fetchAllNFe", page, searchQuery], // Incluímos page e searchQuery na chave
+    () => getAllNFe(),
+    {
+      keepPreviousData: true, // Mantém os dados anteriores enquanto a nova página carrega
+    }
   );
-
 
   useEffect(() => {
     if (isSuccess) {
@@ -136,10 +150,25 @@ export const useGetAllNFe = () => {
     }
 
     if (isError) {
-      toast.error("Nenhuma Nota fiscal verificada");
+      toast.error("Erro ao buscar as Notas Fiscais");
     }
   }, [isSuccess, isError]);
 
-
-  return { nfes, isLoading };
+  return { data, isLoading };
 };
+
+export type SearchState = {
+  searchQuery: string; 
+  page: number; 
+  sortOption: string; 
+} 
+
+
+export type ResponseSearch = {
+  data: INFe[],
+  pagination: {
+    total: number,
+    page: number,
+    pages: number
+  }
+}

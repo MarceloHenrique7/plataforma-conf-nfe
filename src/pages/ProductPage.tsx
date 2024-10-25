@@ -1,7 +1,7 @@
 import { ScrollArea } from "../components/ui/scroll-area";
 import { useGetmyNFe, useUpdateNFe } from "../api/ApiMyNFe";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Input } from "../components/ui/input";
 import { Button } from "../components/ui/button";
 
@@ -21,10 +21,14 @@ interface Product {
   qCom: string
 }
 
-// Componente de Popover
 const Popover = ({ message, msgBtn, onClose }: { message: string; msgBtn: string; onClose: () => void }) => {
+
+
+
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
+      tabIndex={0}
+    >
       <div className="bg-white p-6 rounded-lg shadow-lg">
         <h2 className="font-bold text-lg">{message}</h2>
         <Button
@@ -38,6 +42,7 @@ const Popover = ({ message, msgBtn, onClose }: { message: string; msgBtn: string
   );
 };
 
+
 const ProductPage = () => {
   const { id } = useParams(); // Pega o ID da NF-e a partir da URL
 
@@ -48,6 +53,7 @@ const ProductPage = () => {
   const [productFound, setProductFound] = useState<Product | null>(null); // Estado para o produto encontrado
   const [showPopoverNotF, setShowPopoverNotF] = useState(false); // Estado para controlar a visibilidade do popover
   const [showPopoverNFeVerified, setShowPopoverNFeVerified] = useState(true); // Estado para controlar a visibilidade do popover
+  const [totalProdRead, setTotalProdRead] = useState<number>(0)
   const navigate = useNavigate()
 
   console.log(nfe)
@@ -55,6 +61,8 @@ const ProductPage = () => {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const table = queryParams.get("table");
+  const inputRef = useRef<HTMLInputElement>(null);
+
   
   useEffect(() => {
     if (nfe && nfe.products) {
@@ -78,8 +86,11 @@ const ProductPage = () => {
       setProductCode(""); 
       
       if (products.length === 0) {
+        setTotalProdRead(0)
         updateNFe({ codNFe: nfe?.codNFe as string, verified: true, table: Number(table as number | null) });
       }
+
+      setTotalProdRead(prevNumber => prevNumber + 1)
       
     } else {
       setShowPopoverNotF(true);
@@ -101,15 +112,19 @@ const ProductPage = () => {
     setShowPopoverNotF(false); // Fecha o popover
     setShowPopoverNFeVerified(false)
     setProductCode("")
+    inputRef.current?.focus()
   };
 
   const handleClosePopoverNFeVerified = () => {
     setShowPopoverNFeVerified(false)
     navigate({
-      pathname: '/conf'
+      pathname: '/label-page'
     })
+    inputRef.current?.focus()
   };
 
+
+  
   if (isLoading) {
     return "Carregando...";
   }
@@ -129,6 +144,7 @@ const ProductPage = () => {
                 value={productCode} // Valor do input controlado
                 onChange={handleInputChange} // Chama a função para verificar o produto enquanto digita
                 className="border p-2 rounded"
+                ref={inputRef}
               />
 
               {productFound ? (
@@ -151,13 +167,31 @@ const ProductPage = () => {
               <div className="font-bold text-center text-2xl">
                 <h1>Produtos Localizados</h1>
               </div>
-              <div className="flex flex-1 p-2 text-gray-600 flex-wrap gap-2 font-bold justify-between">
+              <div className="flex flex-col flex-1 p-2 text-gray-600 flex-wrap gap-2 font-bold justify-between">
                 <h1>
                   Nfe{nfe?.codNFe}
                 </h1>
-                <p>
-                  Restante: {products.length}
-                </p>
+
+                  <div className="flex justify-between">
+                    <p className="flex items-center gap-2">
+                      <span className="text-lg">
+                        Restante 
+                      </span>
+                      <span className="px-2 bg-gray-200 border-2 border-blue-600  rounded-lg">
+                        {products.length}
+                      </span>
+                    </p>
+                    <p>
+                    <p className="flex items-center gap-2">
+                      <span className="text-lg">
+                        Gravados 
+                      </span>
+                      <span className="px-2 bg-gray-200 border-2 border-blue-600 rounded-lg">
+                        {totalProdRead}
+                      </span>
+                    </p>
+                    </p>
+                </div>
               </div>
               <div className="w-full md:w-auto flex-1 p-10 rounded-md bg-gray-100 md:p-2">
                 <ScrollArea className="p-2 h-full w-full rounded-md border">

@@ -7,6 +7,8 @@ import Layout from './layout/layout'
 import RegisterXML from './pages/RegisterXML'
 import ProductPage from './pages/ProductPage'
 import NFesVerifiedPage from './pages/NFesVerifiedPage'
+import SingleNFePage from './pages/single-nfe-page'
+import LabelPage from './components/LabelPage'
 
 
 
@@ -58,6 +60,16 @@ const AppRoutes = () => {
                     </Layout>
                 }
             />
+            <Route
+                path='/search/nfe/:codNFe'
+                element={
+                    <Layout>
+                        <SingleNFePage />
+                    </Layout>
+                }
+            />
+            <Route path="/label-page" element={<LabelPage />} />
+
         </Routes>
     )
 
