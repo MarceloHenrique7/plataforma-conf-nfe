@@ -3,23 +3,17 @@ import { Link } from "react-router-dom";
 
 const Footer = () => {
     return (
-        <div className="flex flex-col gap-12 w-full p-8 bg-slate-900 text-white flex justify-between items-center">
-            <div>
-                <h1 className="text-xl font-bold text-center">
-                    Conferência de produtos de Notas Fiscais
-                </h1>
-            </div>
-            <div>
-                <p className="flex flex-wrap gap-2">
-                    <span>
-                        ©All rights reserved to 
-                    </span>
-                    <Link to={"https://portfolio-work-f4nv.onrender.com/"} target="_blank" className="font-bold underline">
-                        Marcelo Henrique Developer
-                    </Link>
-                </p>
-            </div>
-        </div>
+    <footer className="flex flex-col gap-2 sm:flex-row py-6 w-full shrink-0 items-center px-4 md:px-6 border-t bg-gray-900">
+        <p className="text-lg text-gray-100 dark:text-gray-400">© 2024 Conferência de NFs. Todos os direitos reservados a <Link target="_blank" to={'https://www.linkedin.com/in/henrique-oliveira-71a2bb275/'} className="underline">Marcelo Henrique Desenvolvedor</Link></p>
+        <nav className="sm:ml-auto flex gap-4 sm:gap-6 text-lg">
+          <Link to={"/"} className="text-lg hover:underline underline-offset-4">
+            Termos de Serviço
+          </Link>
+          <Link to={"/"} className="text-lg hover:underline underline-offset-4" >
+            Privacidade
+          </Link>
+        </nav>
+      </footer>
     )
 
 }

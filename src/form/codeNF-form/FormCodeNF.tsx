@@ -4,23 +4,28 @@ import { Input } from "../../components/ui/input"
 
 
 
+type Props = {
+    fieldName: string,
+    accept: string
+    label: string
+}
 
-const FormCodeNF = () => {
+const FormCodeNF = ({ label, fieldName, accept }: Props) => {
     const { control } = useFormContext()
 
     return (
         <div className="flex flex-col">
         <FormField 
             control={control}
-            name="xmlFiles"
+            name={`${fieldName}`}
             render={({ field }) => (
                 <FormItem className="flex flex-col">
                     <FormLabel>
-                        XML Files
+                        {label}
                     </FormLabel>
                     <FormControl>
                         <Input type="file" 
-                        accept=".xml"
+                        accept={`${accept}`}
                         multiple
                         onChange={(event) => field.onChange(
                             event.target.files ? Array.from(event.target.files) : []
@@ -36,4 +41,4 @@ const FormCodeNF = () => {
 } 
 
 
-export default FormCodeNF
+export default FormCodeNF;

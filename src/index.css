@@ -57,30 +57,38 @@
   }
 }
 
+
+
+/* Estilos gerais do componente */
+#content {
+  margin: 0; /* Remove a margem do conteúdo ao imprimir */
+}
+
+.pagination-container {
+  display: flex;
+  justify-content: center;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.pagination-selector {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  padding: 0 1rem; /* Evita rolagem lateral */
+}
+
+.tabs-content {
+  padding: 0 1rem; /* Para os conteúdos das abas */
+}
+
+
 .outfit {
   font-family: "Outfit", sans-serif;
   font-optical-sizing: auto;
   font-weight: weight;
   font-style: normal;
 }
-@media print {
-  body {
-    margin: 0;
-    padding: 0;
-  }
-
-  .no-print {
-    display: none; /* Oculta elementos que não devem aparecer na impressão */
-  }
-
-  /* Estilize o cartão de etiqueta */
-  .card {
-    page-break-inside: avoid; /* Evita quebras de página dentro do cartão */
-  }
-
-  /* Outras regras de estilização para a impressão */
-}
-
 @layer base {
   * {
     @apply border-border;

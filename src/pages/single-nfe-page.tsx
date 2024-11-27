@@ -1,53 +1,59 @@
-'use client'
+'use client';
 
-import { useState, useEffect } from 'react'
-import { useParams } from 'react-router-dom'
-import { Button } from "../components/ui/button"
+import { useParams } from 'react-router-dom';
+import { Button } from '../components/ui/button';
 import { 
     Dialog,
     DialogContent,
-    DialogDescription,
-    DialogHeader,
-    DialogTitle,
     DialogTrigger,
 } from '../components/ui/dialog';
-import { ScrollArea } from "../components/ui/scroll-area"
-import { INFe, Product } from "../types"
+import { ScrollArea } from '../components/ui/scroll-area';
+import { Product } from '../types';
 import { useGetmyNFe } from '../api/ApiMyNFe';
-
-
+import LabelViewer from '../components/label-viewer';
 
 export default function SingleNFePage() {
-  const { codNFe } = useParams<{ codNFe: string }>()
-
-
-  const { nfe, isLoading } = useGetmyNFe(codNFe as string)
+  const { codNFe } = useParams<{ codNFe: string }>();
+  const { data, isLoading } = useGetmyNFe(codNFe as string);
 
   if (isLoading) {
-    return <div className="flex justify-center items-center h-screen">Loading...</div>
+    return <div className="flex justify-center items-center h-screen">Loading...</div>;
   }
 
-  if (!nfe) {
-    return <div className="flex justify-center items-center h-screen">NFe not found</div>
+  if (!data?.nfe) {
+    return <div className="flex justify-center items-center h-screen">NFe not found</div>;
   }
+
+  console.log(data)
+
+  const adressOfDest = `
+    ${data.nfe.enderDestLgr}, 
+    ${data.nfe.enderDestBairro}, 
+    ${data.nfe.enderDestNro}, 
+    CEP: ${data.nfe.enderDestCep?.slice(0, 5)}-${data.nfe.enderDestCep?.slice(5)}, 
+    ${data.nfe.enderDestxMun} -
+    ${data.nfe.enderDestUF}, 
+  `
 
   return (
     <div className="flex flex-col gap-12 p-4">
-      <h1 className="text-2xl font-bold">NFe Details</h1>
-      <div className={`bg-gray-100 p-6 rounded-lg shadow-md flex flex-col gap-4 ${nfe.verified ? 'bg-gray-100' : 'bg-red-200'}`}>
+      <h1 className="text-4xl font-bold">Detalhes da nota fiscal</h1>
+      <div className={`${data.nfe.verified ? 'bg-green-100' : 'bg-red-100'} p-6 rounded-lg shadow-md flex flex-col gap-4 ${data.nfe.verified ? 'bg-gray-100' : 'bg-red-200'}`}>
         <div>
-          <h2 className="text-xl font-bold">Cod.NFe: {nfe.codNFe}</h2>
-          <p className="text-gray-600">Versão: {nfe.version}</p>
-          <p className="text-gray-600">Criado: {new Date(nfe.createdAt).toLocaleString()}</p>
-          {
-            nfe.verified ? (
-                <p className="text-gray-600">Verificado: {new Date(nfe.verifiedAt).toLocaleString()}</p>
-            ) : (
-                ''
-            )
-          }
-          <p className="text-gray-600">N.Pedido: {nfe.products[0].xPed}</p>
-          <p className="text-gray-600">Mesa: {nfe.table || 'S/M'}</p>
+          <h2 className="text-xl font-bold">Cod.NFe: {data.nfe.codNFe}</h2>
+          <p className="text-gray-600">Versão: {data.nfe.version}</p>
+          <p className="text-gray-600">Criado: {new Date(data.nfe.createdAt).toLocaleString()}</p>
+          {data.nfe.verified && <p className="text-gray-600 font-bold">Verificado em: {new Date(data?.nfe?.verifiedAt || '').toLocaleString()}</p>}
+          <p className="text-gray-600">N.Pedido: {data.nfe.orderCode}</p>
+          <p className="text-gray-600">Mesa: {data.nfe.table || 'S/M'}</p>
+        </div>
+        <div className='flex flex-col'>
+          <h1 className="text-xl font-bold">Dados do destinatário</h1>
+          <p className="text-gray-600">CPF: {data.nfe.destCpf || ''}</p>
+          <p className="text-gray-600">E-Mail: {data.nfe.destEmail || ''}</p>
+          <p className="text-gray-600">Nome: {data.nfe.destxNome || ''}</p>
+          <p className="text-gray-600">Endereço: {`${adressOfDest} ` || ''}</p>
+          <p className="text-gray-600">Telefone: {`(${data.nfe.enderDestFone?.slice(0,2)}) ${data.nfe.enderDestFone?.slice(2)}` || ''}</p>
         </div>
         <Dialog>
           <DialogTrigger asChild>
@@ -57,22 +63,23 @@ export default function SingleNFePage() {
           </DialogTrigger>
           <DialogContent className="w-auto max-w-[75%] max-h-[75%] flex">
             <ScrollArea className="p-4">
-              {nfe.products.map((product: Product) => (
+              {data.nfe.products?.map((product: Product) => (
                 <div key={product.cEAN} className="p-3">
-                  <DialogHeader>
-                    <DialogTitle>{product.xProd}</DialogTitle>
-                  </DialogHeader>
-                  <DialogDescription className="flex flex-col">
-                    <span>Cod EAN: {product.cEAN}</span>
-                    <span>Cod Prod: {product.cProd}</span>
-                    <span>Qtd: {Number(product.qCom)}</span>
-                  </DialogDescription>
+                  <h3 className="text-lg font-bold">{product.xProd}</h3>
+                  <p>Cod EAN: {product.cEAN}</p>
+                  <p>Cod Prod: {product.cProd}</p>
                 </div>
               ))}
             </ScrollArea>
           </DialogContent>
+          <LabelViewer
+            name={data.nfe.destxNome?.toString() || '(Sem Nome Informado)'}
+            address={adressOfDest}
+            orderCode={Number(data.nfe.orderCode)}
+            dealer={data.dealer.responsibleStructure}
+          />
         </Dialog>
       </div>
     </div>
-  )
+  );
 }

@@ -1,6 +1,8 @@
 import { Link } from "react-router-dom";
-
-
+import DropDownCreate from "./DropDownCreate";
+import DropDownConf from "./DropDownConf";
+import DropDownSearch from "./DropDownSearch";
+import DropDownStatus from "./DropDownStatus";
 
 
 
@@ -8,24 +10,18 @@ import { Link } from "react-router-dom";
 const Header = () => {
 
     return (
-        <div className="text-center outfit p-8 bg-slate-900 text-white flex justify-between items-center">
+        <div className="text-center px-20 py-5 outfit bg-slate-900 text-white flex justify-between items-center">
             <div>
                 <Link to={"/"} className="font-bold text-3xl">
-                    Conferência de NFs
+                    Conf
                 </Link>
             </div>
-            <div className="space-x-5 outfit font-bold">
-                <Link to={"/registrar-xml"} >
-                    Cadastrar NFe
-                </Link>
-                <Link to={"/conf"} >
-                    Conferir Nota
-                </Link>
-                <Link to={"/notas-fiscais-status"} >
-                    NFe Status
-                </Link>
+            <div className="flex gap-12 items-center justify-around">
+                <DropDownCreate/>
+                <DropDownConf/>
+                <DropDownSearch/>
+                <DropDownStatus/>
             </div>
-
         </div>
     )
 

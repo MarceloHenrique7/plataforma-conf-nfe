@@ -1,83 +1,105 @@
-import React, { useState } from 'react';
-import { ArrowBigRight } from "lucide-react";
-import ShippingLabel from '../components/shipping-label'; // Certifique-se de que o caminho está correto
-import { Link } from 'react-router-dom';
+import { Button } from '../components/ui/button'
+import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card'
+import { Search, CheckSquare, Upload, ArrowBigRight } from "lucide-react"
+import { Link } from "react-router-dom"
 
-function HomePage() {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const handlePrint = () => {
-    window.print();
-    setIsModalOpen(false); // Fecha o modal após a impressão
-  };
-
+const HomePage = () => {
   return (
-    <div className="flex flex-col gap-10">
-      <div className="font-bold flex flex-col gap-5">
-        <h1 className="text-xl">Primeira Etapa</h1>
-        <Link to={"/registrar-xml"} className="flex items-center justify-between hover:bg-gray-800 hover:text-white transition-all 300-ms bg-gray-200 rounded-md p-2 inline-block">
-          Cadastrar Nota Fiscal com XML<ArrowBigRight />
-        </Link>
-      </div>
-      <div className="font-bold flex flex-col gap-5">
-        <h1 className="text-xl">Segunda Etapa</h1>
-        <Link to={"/conf"} className="flex items-center justify-between hover:bg-gray-800 hover:text-white transition-all 300-ms bg-gray-200 rounded-md p-2 inline-block">
-          Buscar pela Nota Fiscal <ArrowBigRight />
-        </Link>
-      </div>
-      <div className="font-bold flex flex-col gap-5">
-        <h1 className="text-xl">Terceira Etapa</h1>
-        <Link to={"/"} className="flex items-center justify-between hover:bg-gray-800 hover:text-white transition-all 300-ms bg-gray-200 rounded-md p-2 inline-block">
-          Verificar Produtos <ArrowBigRight />
-        </Link>
-      </div>
-      <div className="font-bold flex flex-col gap-5">
-        <h1 className="text-xl">Imprimir Etiquetas</h1>
-        <button 
-          onClick={() => setIsModalOpen(true)} 
-          className="flex items-center justify-between hover:bg-gray-800 hover:text-white transition-all 300-ms bg-gray-200 rounded-md p-2 inline-block"
-        >
-          Ver Etiquetas <ArrowBigRight />
-        </button>
-      </div>
+    <div className="flex flex-col min-h-screen">
 
-      {/* Modal para Exibir Etiquetas */}
-      {isModalOpen && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-white p-4 rounded shadow-lg">
-            <ShippingLabel
-              type="DESTINATÁRIO"
-              name="MARIA FRANCISCA MENDES ROCHA AZEVEDO"
-              address="Rua Barão de Campinas, nº 400 - apto 39"
-              location="Campos Elíseos - São Paulo - SP"
-              zipCode="01201-000"
-            />
-            <ShippingLabel
-              type="REMETENTE"
-              name="JOÃO FRANCISCO MENDES ROCHA AZEVEDO"
-              address="Rua Maria José, nº 470 - apto 19"
-              location="Bela Vista - São Paulo - SP"
-              zipCode="01324-010"
-            />
-            <div className="flex justify-between mt-4">
-              <button 
-                onClick={handlePrint} 
-                className="px-4 py-2 bg-green-500 text-white rounded"
-              >
-                Imprimir Etiquetas
-              </button>
-              <button 
-                onClick={() => setIsModalOpen(false)} 
-                className="px-4 py-2 bg-red-500 text-white rounded"
-              >
-                Fechar
-              </button>
+      <main className="flex-1">
+        <section className="w-full py-12 md:py-24 lg:py-32 xl:py-48">
+          <div className="container px-4 md:px-6">
+            <div className="flex flex-col items-center space-y-4 text-center">
+              <div className="space-y-2">
+                <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl/none">
+                  Conferência de NFs
+                </h1>
+                <p className="mx-auto max-w-[700px] text-gray-500 md:text-xl dark:text-gray-400">
+                  Simplifique o processo de conferência de notas fiscais com nossa plataforma intuitiva e eficiente.
+                </p>
+              </div>
+              <div className="space-x-4">
+                <Button>Começar</Button>
+                <Button variant="outline">Saiba mais</Button>
+              </div>
             </div>
           </div>
-        </div>
-      )}
+        </section>
+        <section className="w-full py-12 md:py-24 lg:py-32 bg-gray-100 dark:bg-gray-800">
+          <div className="container px-4 md:px-6">
+            <div className="grid gap-6 lg:grid-cols-3 lg:gap-12">
+              <Card>
+                <CardHeader>
+                  <Upload className="h-10 w-10 mb-2 text-primary" />
+                  <CardTitle>Cadastro de Notas</CardTitle>
+                </CardHeader>
+                <CardContent className='flex flex-col gap-2'>
+                  <p className="text-sm text-gray-500 dark:text-gray-400">
+                    Faça o upload de arquivos XML para cadastrar novas notas fiscais de forma rápida e fácil.
+                  </p>
+                    <Link to={"/registrar-xml"} >
+                      <Button className='w-full flex items-center justify-between'>
+                          Cadastrar
+                        <ArrowBigRight/>
+                      </Button>
+                    </Link>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardHeader>
+                  <Search className="h-10 w-10 mb-2 text-primary" />
+                  <CardTitle>Busca Avançada</CardTitle>
+                </CardHeader>
+                <CardContent className='flex flex-col gap-2'>
+                  <p className="text-sm text-gray-500 dark:text-gray-400">
+                    Encontre facilmente as notas fiscais que você precisa com nossa ferramenta de busca poderosa.
+                  </p>
+                    <Link to={"/buscar-nfe"}>
+                      <Button className='w-full flex items-center justify-between'>
+                          Buscar
+                        <ArrowBigRight/>
+                      </Button>
+                    </Link>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardHeader>
+                  <CheckSquare className="h-10 w-10 mb-2 text-primary" />
+                  <CardTitle>Verificação de Produtos</CardTitle>
+                </CardHeader>
+                <CardContent className='flex flex-col gap-2'>
+                  <p className="text-sm text-gray-500 dark:text-gray-400">
+                    Confira e valide os produtos listados em cada nota fiscal com precisão e eficiência.
+                  </p>
+                  <Link to={"/conf"} >
+                    <Button className='w-full flex items-center justify-between'>
+                        Conferir Notas
+                      <ArrowBigRight/>
+                    </Button>
+                  </Link>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        </section>
+        <section className="w-full py-12 md:py-24 lg:py-32">
+          <div className="container px-4 md:px-6">
+            <div className="flex flex-col items-center justify-center space-y-4 text-center">
+              <div className="space-y-2">
+                <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl">Comece a usar hoje</h2>
+                <p className="max-w-[600px] text-gray-500 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed dark:text-gray-400">
+                  Junte-se a milhares de empresas que já otimizaram seu processo de conferência de notas fiscais.
+                </p>
+              </div>
+              <Button size="lg">Criar uma conta gratuita</Button>
+            </div>
+          </div>
+        </section>
+      </main>
+
     </div>
-  );
+  )
 }
 
-export default HomePage;
+export default HomePage

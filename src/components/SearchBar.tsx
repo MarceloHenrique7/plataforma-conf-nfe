@@ -8,9 +8,9 @@ import { Input } from './ui/input';
 import { Button } from './ui/button';
 
 
-const formSchema = z.object({ // criamos um schema de validação para a nossa searchQuery
-    searchQuery: z.string({ // aqui definimos que searchQuery e do tipo string
-        required_error: "Restaurant name is required" // caso esse campo seja vazio retornamos um erro que required_error com essa mensagem, isso significa que o user não digitou nada no campo
+const formSchema = z.object({
+    searchQuery: z.string({ 
+        required_error: "Restaurant name is required"
     }),
 })
 
@@ -72,10 +72,10 @@ const SearchBar = ({ onSubmit, placeHolder, onReset, searchQuery }: Props) => {
                 variant="outline"
                 className="rounded-full"
             >
-                Reset
+                Limpar
             </Button>
             <Button type="submit" className='rounded-full'>
-                Search
+                Procurar
             </Button>
         </form>
     </Form>

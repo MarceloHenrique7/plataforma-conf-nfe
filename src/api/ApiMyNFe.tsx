@@ -1,5 +1,5 @@
 import { useMutation, useQuery } from "react-query";
-import { INFe } from "../types";
+import { INFe, ResultSingleNFe } from "../types";
 import { toast } from "sonner";
 import { useEffect } from "react";
 
@@ -47,7 +47,8 @@ export const useRegisterXML = () => {
     });
 
     if (!response.ok) {
-      throw new Error("Failed to create a recipe");
+        const errorData = await response.json(); 
+        throw new Error(errorData.message || "Erro ao registrar arquivos XML.");
     }
 
     return response.json();
@@ -71,7 +72,7 @@ export const useRegisterXML = () => {
 };
 
 export const useGetmyNFe = (id: string) => {
-  const getMyNFe = async (): Promise<INFe> => {
+  const getMyNFe = async (): Promise<ResultSingleNFe> => {
     const response = await fetch(`${API_BASE_URL}/nfe/get/${id}`, {
       method: "GET",
       headers: {
@@ -80,13 +81,14 @@ export const useGetmyNFe = (id: string) => {
     });
 
     if (!response.ok) {
-      throw new Error("Failed to fetch NFe");
+      const errorData = await response.json(); 
+      throw new Error(errorData.message || "Erro ao buscar pela NFe");
     }
 
     return response.json();
   };
 
-  const { data: nfe, isLoading, isError, isSuccess } = useQuery(
+  const { data, isLoading, isError, isSuccess, error } = useQuery(
     ["fetchMyNFe", id],
     getMyNFe,
     {
@@ -94,18 +96,17 @@ export const useGetmyNFe = (id: string) => {
     }
   );
 
-  // Mensagem de toast exibida ao buscar a NFe
   useEffect(() => {
     if (isSuccess) {
       toast.success("NFe Encontrada");
     }
 
-    if (isError) {
-      toast.error("NFe não existe");
-    }
+      if (error instanceof Error) {
+        toast.error(error.message);
+      }
   }, [isSuccess, isError]);
 
-  return { nfe, isLoading };
+  return { data, isLoading };
 };
 
 export type ResultSearchNFe = {
@@ -117,12 +118,91 @@ export type ResultSearchNFe = {
   data: {
     resVerified: Array<INFe>,
     resNotVerified: Array<INFe>,
-  }
+  },
+  totalDocuments: Array<INFe>,
+} 
+export const useGetAllNFe = (
+  page: number = 1,
+  limit: number = 10,
+  searchQuery: string = "",
+  startDate: string = "",
+  endDate: string = ""
+) => {
+  // Função para buscar dados da API
+  const getAllNFe = async (): Promise<ResultSearchNFe> => {
+    const queryParams = new URLSearchParams({
+      page: page.toString(),
+      limit: limit.toString(),
+      ...(searchQuery && { searchQuery }),
+      ...(startDate && { startDate }),
+      ...(endDate && { endDate }),
+    });
+
+    const response = await fetch(`${API_BASE_URL}/nfe/get/all?${queryParams}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Falha ao buscar NFes");
+    }
+
+    return response.json();
+  };
+
+  // Configuração da consulta usando react-query
+  const { data, isLoading, isError, isSuccess } = useQuery(
+    ["fetchAllNFe", page, limit, searchQuery, startDate, endDate],
+    getAllNFe,
+    {
+      keepPreviousData: true, // Mantém os dados anteriores enquanto carrega os novos
+      staleTime: 300000, // Tempo para considerar os dados frescos (5 minutos)
+    }
+  );
+
+  // Notificações com base no estado da consulta
+  useEffect(() => {
+    if (isSuccess) {
+      toast.success("Notas Fiscais Encontradas");
+    }
+    if (isError) {
+      toast.error("Erro ao buscar as Notas Fiscais");
+    }
+  }, [isSuccess, isError]);
+
+  return { data, isLoading, isError };
+};
+
+
+type ResultAllNFeNoOrder = {
+  totDoc: number,
+  totPages: number,
+  currentPage: number,
+  data: Array<INFe>
 }
 
-export const useGetAllNFe = (page: number = 1, limit: number = 10, searchQuery: string = "") => {
-  const getAllNFe = async (): Promise<ResultSearchNFe> => {
-    const response = await fetch(`${API_BASE_URL}/nfe/get/all?page=${page}&limit=${limit}&searchQuery=${searchQuery}`, {
+export const useGetAllNFeNoOrder = (
+  page: number = 1,
+  limit: number = 10,
+  startDate: string = "",
+  endDate: string = ""
+) => {
+  // Função para buscar dados da API
+  console.log("start " + startDate)
+  console.log("emd " + endDate)
+  const getAllNFeNoOrder = async (): Promise<ResultAllNFeNoOrder> => {
+    const queryParams = new URLSearchParams({
+      page: page.toString(),
+      limit: limit.toString(),
+      startDate: startDate,
+      endDate: endDate,
+   });
+
+   console.log(queryParams)
+
+    const response = await fetch(`${API_BASE_URL}/nfe/get/all/no-order?${queryParams}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -137,24 +217,25 @@ export const useGetAllNFe = (page: number = 1, limit: number = 10, searchQuery: 
   };
 
   const { data, isLoading, isError, isSuccess } = useQuery(
-    ["fetchAllNFe", page, searchQuery], // Incluímos page e searchQuery na chave
-    () => getAllNFe(),
+    ["fetchAllNFeNoOrder", page, limit, startDate, endDate],
+    getAllNFeNoOrder,
     {
-      keepPreviousData: true, // Mantém os dados anteriores enquanto a nova página carrega
+      keepPreviousData: true, // Mantém os dados anteriores enquanto carrega os novos
+      staleTime: 300000, // Tempo para considerar os dados frescos (5 minutos)
     }
   );
 
+  // Notificações com base no estado da consulta
   useEffect(() => {
     if (isSuccess) {
       toast.success("Notas Fiscais Encontradas");
     }
-
     if (isError) {
       toast.error("Erro ao buscar as Notas Fiscais");
     }
   }, [isSuccess, isError]);
 
-  return { data, isLoading };
+  return { data, isLoading, isError };
 };
 
 export type SearchState = {
